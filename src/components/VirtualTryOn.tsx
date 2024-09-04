@@ -1,25 +1,29 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 
 const VirtualTryOn = () => {
-  const [personImage, setPersonImage] = useState(null);
-  const [garmentImage, setGarmentImage] = useState(null);
-  const [resultImage, setResultImage] = useState(null);
+  const [personImage, setPersonImage] = useState<File | null>(null);
+  const [garmentImage, setGarmentImage] = useState<File | null>(null);
+  const [resultImage, setResultImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handlePersonImageUpload = (e) => {
-    setPersonImage(e.target.files[0]);
-    setResultImage(null); // 重置结果图像
+  const handlePersonImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setPersonImage(e.target.files[0]);
+      setResultImage(null); // 重置结果图像
+    }
   };
 
-  const handleGarmentImageUpload = (e) => {
-    setGarmentImage(e.target.files[0]);
-    setResultImage(null); // 重置结果图像
+  const handleGarmentImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setGarmentImage(e.target.files[0]);
+      setResultImage(null); // 重置结果图像
+    }
   };
 
   const handleSubmit = async () => {
@@ -33,8 +37,8 @@ const VirtualTryOn = () => {
     const formData = new FormData();
     formData.append('person_img', personImage);
     formData.append('garment_img', garmentImage);
-    formData.append('seed', 0);
-    formData.append('randomize_seed', true);
+    formData.append('seed', '0');
+    formData.append('randomize_seed', 'true');
 
     try {
       const response = await fetch('/api/virtual-try-on', {
